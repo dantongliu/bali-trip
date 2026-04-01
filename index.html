@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>2026 巴厘岛行程安排</title>
+<!-- LeanCloud SDK -->
+<script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.15.2/dist/av-min.js"></script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ocean-deep: #0a3d62;
+    --ocean-mid: #1e90ff;
+    --ocean-light: #87ceeb;
+    --sunset-orange: #ff6b35;
+    --coral: #ff7675;
+    --palm-green: #2d6a4f;
+    --text-light: #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.2);
+  }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(180deg, #fad0c4 0%, #87ceeb 12%, #1e90ff 50%, #0a3d62 100%);
+    color: var(--text-light);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .wave { position: fixed; bottom: 0; width: 200%; height: 100px; opacity: 0.5; z-index: 0; }
+  .wave-1 {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='%2387ceeb' fill-opacity='0.4' d='M0,60 C360,120 720,0 1080,60 C1260,90 1350,30 1440,60 L1440,120 L0,120Z'/%3E%3C/svg%3E") repeat-x;
+    animation: wave-move 8s linear infinite;
+  }
+  .wave-2 {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='%231e90ff' fill-opacity='0.3' d='M0,80 C360,20 720,100 1080,40 C1260,20 1350,80 1440,40 L1440,120 L0,120Z'/%3E%3C/svg%3E") repeat-x;
+    animation: wave-move 12s linear infinite reverse; bottom: -10px;
+  }
+  @keyframes wave-move { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  .deco-sun {
+    position: fixed; top: 25px; right: 25px;
+    width: 70px; height: 70px;
+    background: radial-gradient(circle, #fff7a1 30%, #ffb347 70%, transparent 71%);
+    border-radius: 50%;
+    box-shadow: 0 0 60px rgba(255, 183, 77, 0.5);
+    animation: pulse-glow 4s ease-in-out infinite;
+    z-index: 0; pointer-events: none;
+  }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 60px rgba(255,183,77,0.5); }
+    50% { box-shadow: 0 0 90px rgba(255,183,77,0.7); }
+  }
+
+  .container {
+    position: relative; z-index: 1;
+    max-width: 520px; margin: 0 auto;
+    padding: 20px 16px 90px;
+  }
+  @media (min-width: 768px) { .container { max-width: 640px; padding: 30px 24px 90px; } }
+
+  .hero { text-align: center; padding: 30px 16px 20px; }
+  .hero-icon { font-size: 3.5rem; animation: float-y 3s ease-in-out infinite; display: inline-block; }
+  .hero h1 { font-size: 1.8rem; font-weight: 800; text-shadow: 2px 4px 12px rgba(0,0,0,0.3); margin: 8px 0 4px; letter-spacing: 1px; }
+  .hero p { font-size: 0.9rem; color: rgba(255,255,255,0.8); }
+  @keyframes float-y { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+  .countdown-section {
+    background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border); border-radius: 18px;
+    padding: 20px; margin-bottom: 20px; text-align: center;
+  }
+  .countdown-title { font-size: 0.85rem; color: rgba(255,255,255,0.75); margin-bottom: 10px; }
+  .countdown-grid { display: flex; justify-content: center; gap: 10px; }
+  .countdown-item { background: rgba(255,255,255,0.12); border-radius: 12px; padding: 10px 14px; min-width: 58px; }
+  .countdown-num { font-size: 1.6rem; font-weight: 800; line-height: 1; }
+  .countdown-label { font-size: 0.65rem; color: rgba(255,255,255,0.6); margin-top: 3px; }
+
+  .nav-tabs {
+    display: flex; gap: 8px; margin-bottom: 18px;
+    overflow-x: auto; padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    flex-shrink: 0; padding: 9px 18px; border-radius: 24px;
+    border: 1px solid var(--glass-border); background: var(--glass-bg);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    color: rgba(255,255,255,0.75); font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; transition: all 0.3s; white-space: nowrap;
+    -webkit-tap-highlight-color: transparent; user-select: none;
+  }
+  .nav-tab.active {
+    background: linear-gradient(135deg, var(--sunset-orange), var(--coral));
+    color: white; border-color: transparent;
+    box-shadow: 0 4px 14px rgba(255,107,53,0.4);
+  }
+
+  .panel { display: none; animation: fadeUp 0.4s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+  .day-card {
+    background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border); border-radius: 18px;
+    padding: 18px; margin-bottom: 14px; transition: all 0.3s;
+  }
+  .day-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .day-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: linear-gradient(135deg, var(--sunset-orange), var(--coral));
+    color: white; padding: 5px 12px; border-radius: 16px;
+    font-size: 0.78rem; font-weight: 700;
+  }
+  .day-date { font-size: 0.72rem; color: rgba(255,255,255,0.55); margin-top: 4px; }
+  .day-location { font-size: 0.8rem; color: rgba(255,255,255,0.85); margin-top: 3px; font-weight: 600; }
+  .day-toggle {
+    width: 26px; height: 26px; background: rgba(255,255,255,0.12);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; color: rgba(255,255,255,0.7); transition: transform 0.3s;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .day-card.collapsed .day-toggle { transform: rotate(-90deg); }
+  .day-card.collapsed .day-body { display: none; }
+  .day-body { margin-top: 14px; }
+
+  .itin-block { margin-bottom: 12px; }
+  .itin-block-title {
+    font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.5);
+    margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .itin-text {
+    font-size: 0.85rem; color: rgba(255,255,255,0.9); line-height: 1.75;
+    white-space: pre-line;
+  }
+  .itin-detail {
+    background: rgba(255,255,255,0.06); border-radius: 10px;
+    padding: 10px 12px; margin-top: 6px;
+    font-size: 0.8rem; color: rgba(255,255,255,0.75); line-height: 1.7;
+    white-space: pre-line;
+  }
+
+  .todo-card {
+    background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border); border-radius: 18px;
+    padding: 18px; margin-bottom: 14px;
+  }
+  .todo-section-title {
+    font-size: 0.95rem; font-weight: 700; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sync-status {
+    font-size: 0.65rem; padding: 2px 8px; border-radius: 8px;
+    font-weight: 500; margin-left: auto;
+  }
+  .sync-ok { background: rgba(45,106,79,0.3); color: #52c234; }
+  .sync-loading { background: rgba(255,165,0,0.3); color: #ffa500; }
+  .sync-error { background: rgba(255,0,0,0.3); color: #ff6b6b; }
+
+  .todo-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .todo-item:last-child { border-bottom: none; }
+  .todo-box {
+    width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.35);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; color: transparent; transition: all 0.3s;
+    margin-top: 1px;
+  }
+  .todo-item.checked .todo-box {
+    background: linear-gradient(135deg, var(--palm-green), #52c234);
+    border-color: transparent; color: white;
+  }
+  .todo-item.checked .todo-text { text-decoration: line-through; opacity: 0.45; }
+  .todo-right { flex: 1; }
+  .todo-text { font-size: 0.85rem; line-height: 1.5; transition: all 0.3s; }
+  .todo-meta { display: flex; gap: 8px; margin-top: 3px; flex-wrap: wrap; }
+  .todo-person { font-size: 0.7rem; padding: 1px 8px; border-radius: 8px; background: rgba(30,144,255,0.25); color: #87ceeb; }
+  .todo-status-tag { font-size: 0.7rem; padding: 1px 8px; border-radius: 8px; }
+  .status-done { background: rgba(45,106,79,0.3); color: #52c234; }
+  .status-ing { background: rgba(255,165,0,0.3); color: #ffa500; }
+  .status-todo { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
+  .todo-note { font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+  .progress-bar {
+    width: 100%; height: 5px; background: rgba(255,255,255,0.12);
+    border-radius: 3px; margin-top: 14px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 3px;
+    background: linear-gradient(90deg, var(--palm-green), #52c234);
+    transition: width 0.5s ease;
+  }
+  .progress-text { font-size: 0.72rem; color: rgba(255,255,255,0.5); text-align: right; margin-top: 4px; }
+
+  .float-nav {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    background: rgba(10,61,98,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); border-radius: 28px;
+    padding: 6px 10px; display: flex; gap: 4px; z-index: 50;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  }
+  .float-btn {
+    width: 42px; height: 42px; border-radius: 50%; border: none;
+    background: transparent; color: rgba(255,255,255,0.45);
+    font-size: 1.15rem; cursor: pointer; transition: all 0.3s;
+    display: flex; align-items: center; justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .float-btn.active {
+    background: linear-gradient(135deg, var(--sunset-orange), var(--coral));
+    color: white; box-shadow: 0 4px 12px rgba(255,107,53,0.4);
+  }
+
+  .scroll-top {
+    position: fixed; bottom: 78px; right: 16px;
+    width: 36px; height: 36px; border-radius: 50%; border: none;
+    background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+    color: white; font-size: 0.9rem; cursor: pointer; z-index: 50;
+    opacity: 0; transform: translateY(16px); transition: all 0.3s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .scroll-top.visible { opacity: 1; transform: translateY(0); }
+
+  .page-loader {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, #0a3d62, #1e90ff);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 999; transition: opacity 0.5s, visibility 0.5s;
+  }
+  .page-loader.hidden { opacity: 0; visibility: hidden; }
+  .loader-icon { font-size: 3.5rem; animation: bounce 1s ease infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+  .loader-text { margin-top: 12px; font-size: 0.9rem; color: rgba(255,255,255,0.8); }
+  .loader-dots span { animation: blink 1.4s infinite both; }
+  .loader-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loader-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink { 0%,100% { opacity:0.2; } 50% { opacity:1; } }
+
+  /* Setup Banner */
+  .setup-banner {
+    background: rgba(255,107,53,0.25); border: 1px solid rgba(255,107,53,0.5);
+    border-radius: 14px; padding: 14px 16px; margin-bottom: 18px;
+    font-size: 0.82rem; line-height: 1.7; color: rgba(255,255,255,0.9);
+  }
+  .setup-banner strong { color: #ffa500; }
+  .setup-banner code {
+    background: rgba(0,0,0,0.3); padding: 1px 6px; border-radius: 4px;
+    font-size: 0.75rem; font-family: monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-loader" id="pageLoader">
+  <div class="loader-icon">🏝️</div>
+  <div class="loader-text">正在加载巴厘岛之旅<span class="loader-dots"><span>.</span><span>.</span><span>.</span></span></div>
+</div>
+
+<div class="wave wave-1"></div>
+<div class="wave wave-2"></div>
+<div class="deco-sun"></div>
+
+<div class="container">
+
+  <div class="hero">
+    <div class="hero-icon">🌴</div>
+    <h1>2026 巴厘岛之旅</h1>
+    <p>4.24 — 5.3 · 9天8晚</p>
+  </div>
+
+  <div class="countdown-section">
+    <div class="countdown-title">距离出发还有</div>
+    <div class="countdown-grid">
+      <div class="countdown-item"><div class="countdown-num" id="cdDays">--</div><div class="countdown-label">天</div></div>
+      <div class="countdown-item"><div class="countdown-num" id="cdHours">--</div><div class="countdown-label">时</div></div>
+      <div class="countdown-item"><div class="countdown-num" id="cdMins">--</div><div class="countdown-label">分</div></div>
+      <div class="countdown-item"><div class="countdown-num" id="cdSecs">--</div><div class="countdown-label">秒</div></div>
+    </div>
+  </div>
+
+  <!-- Setup Banner (shown when LeanCloud not configured) -->
+  <div class="setup-banner" id="setupBanner" style="display:none;">
+    ⚠️ <strong>云同步未配置</strong>：当前待办数据仅存在本地浏览器。<br>
+    配置方法：打开本文件，搜索 <code>YOUR_APP_ID</code> 和 <code>YOUR_APP_KEY</code>，替换为你的 LeanCloud 凭据即可。
+  </div>
+
+  <div class="nav-tabs" id="navTabs">
+    <div class="nav-tab active" data-panel="itinerary">📅 行程</div>
+    <div class="nav-tab" data-panel="todo">✅ 待办</div>
+  </div>
+
+  <!-- ========== Panel: 行程 ========== -->
+  <div class="panel active" id="panel-itinerary">
+
+    <div class="day-card" id="day1">
+      <div class="day-header" onclick="toggleDay('day1')">
+        <div>
+          <div class="day-badge">🛫 D1</div>
+          <div class="day-date">4.24 — 4.25</div>
+          <div class="day-location">北京→广州→巴厘岛</div>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="itin-block">
+          <div class="itin-block-title">行程安排</div>
+          <div class="itin-text">21:30 北京大兴飞广州白云 T2（3h15m，+1天 00:45 抵达）
+00:45 广州白云 T2 中转休整（1h50m）
+02:35 广州白云 T2 飞巴厘岛伍拉赖机场（5h10m）
+07:45 抵达巴厘岛→ayana 林畔酒店（约 1h）
+09:00 办理入住 + 酒店休闲（悬崖泳池 / 沙滩放空）
+16:00 金巴兰海滩看日落（1.5h）</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🏨 住宿</div>
+          <div class="itin-text">ayana 林畔酒店（已订）
+RIMBA by AYANA Bali</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🍽️ 餐厅</div>
+          <div class="itin-text">中饭：grab点越南河粉
+晚饭：Kepiting Sukro Uluwatu 2（螃蟹、咸蛋黄炸鸡、海鲜炒饭）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card" id="day2">
+      <div class="day-header" onclick="toggleDay('day2')">
+        <div>
+          <div class="day-badge">🏖️ D2</div>
+          <div class="day-date">4.26</div>
+          <div class="day-location">巴厘岛（酒店休闲日）</div>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="itin-block">
+          <div class="itin-block-title">行程安排</div>
+          <div class="itin-text">全天 ayana 林畔酒店深度休闲
+可选：酒店悬崖 SPA / 网红打卡点拍照 / 沙滩漫步
+傍晚酒店内享用海景晚餐</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🏨 住宿</div>
+          <div class="itin-text">ayana 林畔酒店（已订）</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🎯 预约</div>
+          <div class="itin-text">预约悬崖观赏落日（提前10天）</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🍽️ 餐厅</div>
+          <div class="itin-text">中饭：samisami吃意面和披萨
+晚饭：Wahaha Pork Ribs Jimbaran（烤肋排、炸猪肘）或者hatiku（海鲜大排档）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card" id="day3">
+      <div class="day-header" onclick="toggleDay('day3')">
+        <div>
+          <div class="day-badge">🚤 D3</div>
+          <div class="day-date">4.27</div>
+          <div class="day-location">巴厘岛→佩尼达岛（西线）</div>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="itin-block">
+          <div class="itin-block-title">行程安排</div>
+          <div class="itin-text">12:00 ayana 林畔酒店→萨努尔码头（0.75h）→西线核心
+破碎沙滩（1h，打卡天然拱门）
+天使浴池（1h，网红无边泳池拍照）
+天仙裂缝（1h，含下崖拍照时间）</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🏨 住宿</div>
+          <div class="itin-text">蓝港海滨别墅和餐厅（已订）
+Blue Harbor Beachfront Villas & Resto</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🎯 包车东西线两日游</div>
+          <div class="itin-detail">4.27-4.28，2人带行李
+第一天：上午Ayana林畔接，巴厘岛走东线。需包含：巴厘岛专车单程接、单程船票、上岛费，午餐，东线专车
+第二天：Blue Harbor接，上午浮潜，下午走西线，回程，送回酒店Dinara Ubud。需包含：浮潜（拼船）、西线专车、下岛单程船票、送回巴厘岛的单程车
+
+特殊说明：
+1）具体游玩景点可推荐，重体验质量不要求全打卡
+2）浮潜希望能够时间长一些不希望都在路上</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🍽️ 餐厅</div>
+          <div class="itin-text">晚饭：越南粉，挨着酒店 MeVui Penida</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card" id="day4">
+      <div class="day-header" onclick="toggleDay('day4')">
+        <div>
+          <div class="day-badge">🤿 D4</div>
+          <div class="day-date">4.28</div>
+          <div class="day-location">佩尼达岛（东线）→乌布</div>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="itin-block">
+          <div class="itin-block-title">行程安排</div>
+          <div class="itin-text">上午潜水
+钻石沙滩（1.5h，悬崖沙滩打卡）
+树屋打卡（1h，网红机位拍照）
+水晶湾短暂休整（0.5h）
+下午回乌布</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🏨 住宿</div>
+          <div class="itin-text">乌布 Dinara 酒店
+Dinara Ubud</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🍽️ 餐厅</div>
+          <div class="itin-text">晚饭：靠着海，西餐 Secret Penida Restaurant & Bar</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card" id="day5">
+      <div class="day-header" onclick="toggleDay('day5')">
+        <div>
+          <div class="day-badge">🏛️ D5</div>
+          <div class="day-date">4.29</div>
+          <div class="day-location">乌布（市区游玩）</div>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="itin-block">
+          <div class="itin-block-title">行程安排</div>
+          <div class="itin-text">09:00 乌布皇宫游览（1h，感受巴厘岛皇室建筑）
+10:00 乌布传统市场逛街（1h，淘手工艺品 / 伴手礼）
+11:00 圣猴森林公园游玩（1.5h，和猕猴互动）
+12:30 乌布市区简餐（1h）
+13:30 乌布特色 SPA（2h，舒缓海岛奔波疲劳）
+16:00 乌布艺术村闲逛 / 咖啡馆发呆（3h）
+傍晚 逛乌布夜市，品尝街头小吃</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🏨 住宿</div>
+          <div class="itin-text">乌布 Dinara 酒店</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🎯 预约</div>
+          <div class="itin-text">SPA：Ubud Traditional Spa（最晚入场时间16:00）
+已通过 Klook 预约</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🍽️ 餐厅</div>
+          <div class="itin-text">中饭：Compound Warung（猪排饭），挨着皇宫5分钟
+晚饭：酒店附近餐厅 Melali Ubud 或便利店吃泡面</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card" id="day6">
+      <div class="day-header" onclick="toggleDay('day6')">
+        <div>
+          <div class="day-badge">🧘 D6</div>
+          <div class="day-date">4.30</div>
+          <div class="day-location">乌布（休闲放松）</div>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="itin-block">
+          <div class="itin-block-title">行程安排</div>
+          <div class="itin-text">休闲
+18:30 乌布稻田边晚餐，打卡田园风光
+晚间 民宿周边轻逛，享受乌布慢生活</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🏨 住宿</div>
+          <div class="itin-text">乌布 Alaya 度假村（已订）
+Alaya Resort Ubud</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🍽️ 餐厅</div>
+          <div class="itin-text">中饭：Pison Ubud（稻田餐厅），提前whats up，紧挨着酒店
+晚饭：Twist Ubud（黄咖喱好吃），挨着椰子冰淇淋店，紧挨着酒店</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card" id="day7">
+      <div class="day-header" onclick="toggleDay('day7')">
+        <div>
+          <div class="day-badge">🏍️ D7</div>
+          <div class="day-date">5.1</div>
+          <div class="day-location">乌布（户外体验）</div>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="itin-block">
+          <div class="itin-block-title">行程安排</div>
+          <div class="itin-text">上午 ATV 丛林越野（2.5h，含装备讲解 + 接送，走田园 / 丛林路线）
+11:30 返程休整 + 简餐（1.5h）
+下午 阿勇河漂流（2.5h，经典平缓路线），含接送 + 简餐
+途径瀑布游览
+送到机场附近酒店</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🏨 住宿</div>
+          <div class="itin-text">Tijili Hotel Seminyak</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🎯 ATV + 漂流包车1日游</div>
+          <div class="itin-detail">酒店➡️ ATV，28min；ATV ➡️ 漂流，8min；漂流➡️ 酒店 1.5h
+包车一共936
+9点半去ATV，11点半去漂流，下午2点安排去瀑布（Tukad Cepung），回程
+已通过飞猪预约</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🍽️ 餐厅</div>
+          <div class="itin-text">黄飞鸿 / 小厨</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card" id="day8">
+      <div class="day-header" onclick="toggleDay('day8')">
+        <div>
+          <div class="day-badge">🛍️ D8</div>
+          <div class="day-date">5.2</div>
+          <div class="day-location">巴厘岛→胡志明市</div>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="itin-block">
+          <div class="itin-block-title">行程安排</div>
+          <div class="itin-text">9:00 逛 Seminyak Village（饰品/包包/衣服）
+10:30 逛 Bintang 超市（买伴手礼/零食）
+12:00 去 Pork Star 吃猪排饭
+16:00 巴厘岛飞胡志明市新山一机场（3h40m）
+18:40 抵达胡志明市→机场酒店（0.5h）
+酒店休整，为凌晨航班蓄力</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🏨 住宿</div>
+          <div class="itin-text">机场休息</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card" id="day9">
+      <div class="day-header" onclick="toggleDay('day9')">
+        <div>
+          <div class="day-badge">✈️ D9</div>
+          <div class="day-date">5.3</div>
+          <div class="day-location">胡志明市→北京</div>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="itin-block">
+          <div class="itin-block-title">行程安排</div>
+          <div class="itin-text">00:35 胡志明市新山一机场飞北京大兴（4h55m）
+06:30 抵达北京大兴，行程圆满结束 🎉</div>
+        </div>
+        <div class="itin-block">
+          <div class="itin-block-title">🏨 住宿</div>
+          <div class="itin-text">飞机上</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== Panel: 待办 ========== -->
+  <div class="panel" id="panel-todo">
+    <div class="todo-card">
+      <div class="todo-section-title">
+        📋 整体待办事项
+        <span class="sync-status" id="syncStatus"></span>
+      </div>
+      <div id="todoList"></div>
+      <div class="progress-bar"><div class="progress-fill" id="todoBar" style="width:0%"></div></div>
+      <div class="progress-text" id="todoProgress"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="float-nav">
+  <button class="float-btn active" data-panel="itinerary" title="行程">📅</button>
+  <button class="float-btn" data-panel="todo" title="待办">✅</button>
+</div>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ============================================================
+// LeanCloud 配置 —— 请替换为你自己的凭据
+// ============================================================
+const LC_APP_ID  = 'YOUR_APP_ID';
+const LC_APP_KEY = 'YOUR_APP_KEY';
+const LC_SERVER  = ''; // 国际版留空；国内版填你的自定义域名如 https://xxx.lc-cn-n1-shared.com
+
+let cloudEnabled = false;
+
+if (LC_APP_ID !== 'YOUR_APP_ID' && LC_APP_KEY !== 'YOUR_APP_KEY') {
+  try {
+    const initOpts = { appId: LC_APP_ID, appKey: LC_APP_KEY };
+    if (LC_SERVER) initOpts.serverURL = LC_SERVER;
+    AV.init(initOpts);
+    cloudEnabled = true;
+  } catch(e) {
+    console.warn('LeanCloud init failed:', e);
+  }
+}
+
+// ============================================================
+// 待办数据定义（来自 Excel）
+// ============================================================
+const TODO_DATA = [
+  { id: 'todo-0',  text: '买机票（往返）+ 确认行李托运额 + 过境准备（办签证/落地签材料准备）', person: 'lei', status: 'done' },
+  { id: 'todo-1',  text: '酒店预定', person: 'dantong', status: 'done' },
+  { id: 'todo-2',  text: '预约当地行程（包车、景点、漂流、潜水等）', person: 'dantong', status: 'done' },
+  { id: 'todo-3',  text: '提前查找SPA和餐厅', person: 'dantong', status: 'done' },
+  { id: 'todo-4',  text: '购买清单：面罩，呼吸管，潜水袜，花洒，充电宝（3C），防水手机袋和防水包', person: 'dantong', status: 'done' },
+  { id: 'todo-5',  text: '购买：溯溪鞋，速干衣服2套，海滩风衣服，包括两人装备', person: 'dantong', status: 'done' },
+  { id: 'todo-6',  text: '购买：流量卡和转换插头', person: 'lei', status: 'done' },
+  { id: 'todo-7',  text: '订接送机（机场-酒店）', person: 'lei', status: 'ing', note: '巴厘岛接机-飞猪定（done）' },
+  { id: 'todo-8',  text: '研究打车app使用', person: 'lei', status: 'todo' },
+  { id: 'todo-9',  text: '买旅行保险', person: 'lei', status: 'todo' },
+  { id: 'todo-10', text: '换少量美金/印尼盾', person: 'lei', status: 'todo' },
+  { id: 'todo-11', text: '买电话卡/开通境外流量', person: 'lei', status: 'todo' },
+  { id: 'todo-12', text: '准备常用药品（防晒、肠胃、晕船等）', person: 'lei', status: 'todo' },
+  { id: 'todo-13', text: '检查行李证件（护照、机票行程单、酒店确认单）', person: 'dantong、lei', status: 'todo' },
+  { id: 'todo-14', text: '信用卡使用和盗刷', person: 'lei', status: 'todo' },
+  { id: 'todo-15', text: '餐厅提前预约（WhatsApp）', person: 'dantong', status: 'todo' },
+];
+
+// 待办勾选状态（true = 已完成勾选）
+let todoChecked = {};
+
+// ============================================================
+// 初始化
+// ============================================================
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('pageLoader').classList.add('hidden'), 800);
+  renderTodos();
+  loadTodoState();
+});
+
+// ============================================================
+// Countdown
+// ============================================================
+function updateCountdown() {
+  const departure = new Date('2026-04-24T21:30:00');
+  const now = new Date();
+  const diff = departure - now;
+  if (diff <= 0) {
+    ['cdDays','cdHours','cdMins','cdSecs'].forEach(id => document.getElementById(id).textContent = '0');
+    document.querySelector('.countdown-title').textContent = '旅途已经开始啦！🎉';
+    return;
+  }
+  document.getElementById('cdDays').textContent = Math.floor(diff / 864e5);
+  document.getElementById('cdHours').textContent = String(Math.floor((diff % 864e5) / 36e5)).padStart(2, '0');
+  document.getElementById('cdMins').textContent = String(Math.floor((diff % 36e5) / 6e4)).padStart(2, '0');
+  document.getElementById('cdSecs').textContent = String(Math.floor((diff % 6e4) / 1e3)).padStart(2, '0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// ============================================================
+// Tab switch
+// ============================================================
+function switchPanel(panelId) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.panel === panelId));
+  document.querySelectorAll('.float-btn').forEach(b => b.classList.toggle('active', b.dataset.panel === panelId));
+  document.querySelectorAll('.panel').forEach(p => {
+    p.classList.remove('active');
+    if (p.id === 'panel-' + panelId) p.classList.add('active');
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelectorAll('.nav-tab').forEach(t => t.addEventListener('click', () => switchPanel(t.dataset.panel)));
+document.querySelectorAll('.float-btn').forEach(b => b.addEventListener('click', () => switchPanel(b.dataset.panel)));
+
+// Day toggle
+function toggleDay(id) { document.getElementById(id).classList.toggle('collapsed'); }
+
+// Scroll top
+window.addEventListener('scroll', () => {
+  document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 300);
+});
+
+// ============================================================
+// Render Todos
+// ============================================================
+function renderTodos() {
+  const container = document.getElementById('todoList');
+  container.innerHTML = TODO_DATA.map(item => {
+    const checked = todoChecked[item.id] ? 'checked' : '';
+    const statusClass = item.status === 'done' ? 'status-done' : item.status === 'ing' ? 'status-ing' : 'status-todo';
+    const statusText = item.status === 'done' ? '已完成' : item.status === 'ing' ? '进行中' : '待办';
+    const persons = item.person.split('、').map(p => '<span class="todo-person">' + p + '</span>').join('');
+    const note = item.note ? '<div class="todo-note">' + item.note + '</div>' : '';
+    return '<div class="todo-item ' + checked + '" onclick="toggleTodo(\'' + item.id + '\')" data-id="' + item.id + '">' +
+      '<div class="todo-box">✓</div>' +
+      '<div class="todo-right">' +
+        '<div class="todo-text">' + item.text + '</div>' +
+        '<div class="todo-meta">' + persons + '<span class="todo-status-tag ' + statusClass + '">' + statusText + '</span></div>' +
+        note +
+      '</div></div>';
+  }).join('');
+  updateTodoProgress();
+}
+
+function updateTodoUI() {
+  document.querySelectorAll('#todoList .todo-item').forEach(el => {
+    const id = el.dataset.id;
+    el.classList.toggle('checked', !!todoChecked[id]);
+  });
+  updateTodoProgress();
+}
+
+function updateTodoProgress() {
+  const total = TODO_DATA.length;
+  const done = TODO_DATA.filter(t => todoChecked[t.id]).length;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('todoBar').style.width = pct + '%';
+  document.getElementById('todoProgress').textContent = done + ' / ' + total + ' 已完成';
+}
+
+// ============================================================
+// Toggle Todo
+// ============================================================
+function toggleTodo(id) {
+  todoChecked[id] = !todoChecked[id];
+  updateTodoUI();
+  if (navigator.vibrate) navigator.vibrate(10);
+  saveTodoState();
+}
+
+// ============================================================
+// Cloud Sync (LeanCloud) + localStorage fallback
+// ============================================================
+const CLOUD_DOC_ID = 'bali-trip-2026';
+const LOCAL_KEY = 'bali-trip-todo-v2';
+
+function setSyncStatus(type, text) {
+  const el = document.getElementById('syncStatus');
+  el.className = 'sync-status sync-' + type;
+  el.textContent = text;
+}
+
+async function loadTodoState() {
+  // Show setup banner if not configured
+  if (!cloudEnabled) {
+    document.getElementById('setupBanner').style.display = 'block';
+    setSyncStatus('error', '仅本地');
+  }
+
+  if (cloudEnabled) {
+    setSyncStatus('loading', '同步中...');
+    try {
+      const query = new AV.Query('TodoState');
+      query.equalTo('docId', CLOUD_DOC_ID);
+      const result = await query.first();
+      if (result) {
+        todoChecked = result.get('checked') || {};
+        updateTodoUI();
+        // Also save to local as cache
+        localStorage.setItem(LOCAL_KEY, JSON.stringify(todoChecked));
+        setSyncStatus('ok', '已同步');
+        return;
+      }
+      setSyncStatus('ok', '云端无数据');
+    } catch(e) {
+      console.warn('Cloud load failed, falling back to local:', e);
+      setSyncStatus('error', '同步失败');
+    }
+  }
+
+  // Fallback: localStorage
+  try {
+    const local = JSON.parse(localStorage.getItem(LOCAL_KEY));
+    if (local) {
+      todoChecked = local;
+      updateTodoUI();
+    } else {
+      // Initialize from Excel status
+      TODO_DATA.forEach(t => {
+        if (t.status === 'done') todoChecked[t.id] = true;
+      });
+      updateTodoUI();
+    }
+  } catch(e) {}
+}
+
+let saveTimer = null;
+function saveTodoState() {
+  // Always save to localStorage immediately
+  localStorage.setItem(LOCAL_KEY, JSON.stringify(todoChecked));
+
+  // Debounce cloud save
+  if (cloudEnabled) {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveToCloud, 500);
+  }
+}
+
+async function saveToCloud() {
+  setSyncStatus('loading', '保存中...');
+  try {
+    const query = new AV.Query('TodoState');
+    query.equalTo('docId', CLOUD_DOC_ID);
+    let obj = await query.first();
+    if (obj) {
+      obj.set('checked', todoChecked);
+      obj.set('updatedBy', getDeviceName());
+      await obj.save();
+    } else {
+      const TodoState = AV.Object.extend('TodoState');
+      obj = new TodoState();
+      obj.set('docId', CLOUD_DOC_ID);
+      obj.set('checked', todoChecked);
+      obj.set('updatedBy', getDeviceName());
+      // Allow anyone to read/write (no login required)
+      const acl = new AV.ACL();
+      acl.setPublicReadAccess(true);
+      acl.setPublicWriteAccess(true);
+      obj.setACL(acl);
+      await obj.save();
+    }
+    setSyncStatus('ok', '已同步');
+  } catch(e) {
+    console.warn('Cloud save failed:', e);
+    setSyncStatus('error', '保存失败');
+  }
+}
+
+function getDeviceName() {
+  const ua = navigator.userAgent;
+  if (/iPhone/i.test(ua)) return 'iPhone';
+  if (/iPad/i.test(ua)) return 'iPad';
+  if (/Android/i.test(ua)) return 'Android';
+  if (/Mac/i.test(ua)) return 'Mac';
+  if (/Win/i.test(ua)) return 'Windows';
+  return 'Unknown';
+}
+
+// ============================================================
+// Auto-refresh cloud state every 30s (for multi-user sync)
+// ============================================================
+if (cloudEnabled) {
+  setInterval(async () => {
+    try {
+      const query = new AV.Query('TodoState');
+      query.equalTo('docId', CLOUD_DOC_ID);
+      const result = await query.first();
+      if (result) {
+        const remote = result.get('checked') || {};
+        // Only update if different
+        if (JSON.stringify(remote) !== JSON.stringify(todoChecked)) {
+          todoChecked = remote;
+          updateTodoUI();
+          localStorage.setItem(LOCAL_KEY, JSON.stringify(todoChecked));
+          setSyncStatus('ok', '已同步');
+        }
+      }
+    } catch(e) {}
+  }, 30000);
+}
+</script>
+</body>
+</html>
