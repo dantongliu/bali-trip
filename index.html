@@ -17,8 +17,9 @@
     --coral: #ff7675;
     --palm-green: #2d6a4f;
     --text-light: #ffffff;
-    --glass-bg: rgba(255, 255, 255, 0.12);
-    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-body: #f0f4ff;
+    --glass-bg: rgba(0, 20, 60, 0.45);
+    --glass-border: rgba(255, 255, 255, 0.25);
   }
 
   html { scroll-behavior: smooth; font-size: 16px; }
@@ -74,11 +75,11 @@
     border: 1px solid var(--glass-border); border-radius: 18px;
     padding: 20px; margin-bottom: 20px; text-align: center;
   }
-  .countdown-title { font-size: 0.85rem; color: rgba(255,255,255,0.75); margin-bottom: 10px; }
+  .countdown-title { font-size: 0.85rem; color: rgba(255,255,255,0.9); margin-bottom: 10px; }
   .countdown-grid { display: flex; justify-content: center; gap: 10px; }
   .countdown-item { background: rgba(255,255,255,0.12); border-radius: 12px; padding: 10px 14px; min-width: 58px; }
   .countdown-num { font-size: 1.6rem; font-weight: 800; line-height: 1; }
-  .countdown-label { font-size: 0.65rem; color: rgba(255,255,255,0.6); margin-top: 3px; }
+  .countdown-label { font-size: 0.65rem; color: rgba(255,255,255,0.75); margin-top: 3px; }
 
   .nav-tabs {
     display: flex; gap: 8px; margin-bottom: 18px;
@@ -90,7 +91,7 @@
     flex-shrink: 0; padding: 9px 18px; border-radius: 24px;
     border: 1px solid var(--glass-border); background: var(--glass-bg);
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-    color: rgba(255,255,255,0.75); font-size: 0.85rem; font-weight: 600;
+    color: rgba(255,255,255,0.9); font-size: 0.85rem; font-weight: 600;
     cursor: pointer; transition: all 0.3s; white-space: nowrap;
     -webkit-tap-highlight-color: transparent; user-select: none;
   }
@@ -119,8 +120,8 @@
     color: white; padding: 5px 12px; border-radius: 16px;
     font-size: 0.78rem; font-weight: 700;
   }
-  .day-date { font-size: 0.72rem; color: rgba(255,255,255,0.55); margin-top: 4px; }
-  .day-location { font-size: 0.8rem; color: rgba(255,255,255,0.85); margin-top: 3px; font-weight: 600; }
+  .day-date { font-size: 0.72rem; color: rgba(255,255,255,0.75); margin-top: 4px; }
+  .day-location { font-size: 0.8rem; color: #ffffff; margin-top: 3px; font-weight: 600; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
   .day-toggle {
     width: 26px; height: 26px; background: rgba(255,255,255,0.12);
     border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -133,17 +134,17 @@
 
   .itin-block { margin-bottom: 12px; }
   .itin-block-title {
-    font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.5);
+    font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.7);
     margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px;
   }
   .itin-text {
-    font-size: 0.85rem; color: rgba(255,255,255,0.9); line-height: 1.75;
-    white-space: pre-line;
+    font-size: 0.85rem; color: #ffffff; line-height: 1.75;
+    white-space: pre-line; text-shadow: 0 1px 2px rgba(0,0,0,0.2);
   }
   .itin-detail {
-    background: rgba(255,255,255,0.06); border-radius: 10px;
+    background: rgba(255,255,255,0.08); border-radius: 10px;
     padding: 10px 12px; margin-top: 6px;
-    font-size: 0.8rem; color: rgba(255,255,255,0.75); line-height: 1.7;
+    font-size: 0.8rem; color: rgba(255,255,255,0.9); line-height: 1.7;
     white-space: pre-line;
   }
 
@@ -189,8 +190,8 @@
   .todo-status-tag { font-size: 0.7rem; padding: 1px 8px; border-radius: 8px; }
   .status-done { background: rgba(45,106,79,0.3); color: #52c234; }
   .status-ing { background: rgba(255,165,0,0.3); color: #ffa500; }
-  .status-todo { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
-  .todo-note { font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+  .status-todo { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); }
+  .todo-note { font-size: 0.72rem; color: rgba(255,255,255,0.65); margin-top: 2px; }
 
   .progress-bar {
     width: 100%; height: 5px; background: rgba(255,255,255,0.12);
@@ -201,7 +202,7 @@
     background: linear-gradient(90deg, var(--palm-green), #52c234);
     transition: width 0.5s ease;
   }
-  .progress-text { font-size: 0.72rem; color: rgba(255,255,255,0.5); text-align: right; margin-top: 4px; }
+  .progress-text { font-size: 0.72rem; color: rgba(255,255,255,0.7); text-align: right; margin-top: 4px; }
 
   .float-nav {
     position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
@@ -249,6 +250,38 @@
 
   /* Setup Banner */
   .setup-banner {
+
+  /* Quick Nav / TOC */
+  .quick-nav {
+    background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border); border-radius: 18px;
+    padding: 16px 18px; margin-bottom: 20px;
+  }
+  .quick-nav-title {
+    font-size: 0.85rem; font-weight: 700; color: #ffffff;
+    margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+  }
+  .quick-nav-grid {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .quick-nav-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 6px 14px; border-radius: 20px;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+    color: #ffffff; font-size: 0.78rem; font-weight: 600;
+    cursor: pointer; transition: all 0.25s;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .quick-nav-chip:hover, .quick-nav-chip:active {
+    background: linear-gradient(135deg, var(--sunset-orange), var(--coral));
+    border-color: transparent;
+    box-shadow: 0 3px 10px rgba(255,107,53,0.3);
+    transform: translateY(-1px);
+  }
+
+  /* Setup Banner */
+  .setup-banner {
     background: rgba(255,107,53,0.25); border: 1px solid rgba(255,107,53,0.5);
     border-radius: 14px; padding: 14px 16px; margin-bottom: 18px;
     font-size: 0.82rem; line-height: 1.7; color: rgba(255,255,255,0.9);
@@ -286,6 +319,22 @@
       <div class="countdown-item"><div class="countdown-num" id="cdHours">--</div><div class="countdown-label">时</div></div>
       <div class="countdown-item"><div class="countdown-num" id="cdMins">--</div><div class="countdown-label">分</div></div>
       <div class="countdown-item"><div class="countdown-num" id="cdSecs">--</div><div class="countdown-label">秒</div></div>
+    </div>
+  </div>
+
+  <!-- Quick Nav / 游玩目录 -->
+  <div class="quick-nav">
+    <div class="quick-nav-title">🗺️ 游玩总览</div>
+    <div class="quick-nav-grid">
+      <a class="quick-nav-chip" onclick="jumpToDay('day1')">🛫 出发·金巴兰日落</a>
+      <a class="quick-nav-chip" onclick="jumpToDay('day2')">🏖️ 悬崖泳池·SPA</a>
+      <a class="quick-nav-chip" onclick="jumpToDay('day3')">🚤 佩尼达岛·西线</a>
+      <a class="quick-nav-chip" onclick="jumpToDay('day4')">🤿 浮潜·钻石沙滩</a>
+      <a class="quick-nav-chip" onclick="jumpToDay('day5')">🏛️ 乌布皇宫·猴林</a>
+      <a class="quick-nav-chip" onclick="jumpToDay('day6')">🧘 稻田·慢生活</a>
+      <a class="quick-nav-chip" onclick="jumpToDay('day7')">🏍️ ATV·漂流·瀑布</a>
+      <a class="quick-nav-chip" onclick="jumpToDay('day8')">🛍️ 购物·飞胡志明</a>
+      <a class="quick-nav-chip" onclick="jumpToDay('day9')">✈️ 返程回京</a>
     </div>
   </div>
 
@@ -702,6 +751,21 @@ document.querySelectorAll('.float-btn').forEach(b => b.addEventListener('click',
 
 // Day toggle
 function toggleDay(id) { document.getElementById(id).classList.toggle('collapsed'); }
+
+// Jump to specific day from quick nav
+function jumpToDay(dayId) {
+  // Switch to itinerary panel first
+  switchPanel('itinerary');
+  // Expand the target day card if collapsed
+  const card = document.getElementById(dayId);
+  if (card.classList.contains('collapsed')) {
+    card.classList.remove('collapsed');
+  }
+  // Scroll to it after a small delay (for panel switch animation)
+  setTimeout(() => {
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
 
 // Scroll top
 window.addEventListener('scroll', () => {
