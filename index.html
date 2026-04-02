@@ -26,7 +26,7 @@
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-    background: linear-gradient(180deg, #fad0c4 0%, #87ceeb 12%, #1e90ff 50%, #0a3d62 100%);
+    background: linear-gradient(180deg, #0f2027 0%, #203a43 30%, #2c5364 60%, #0a3d62 100%);
     color: var(--text-light);
     min-height: 100vh;
     overflow-x: hidden;
@@ -235,7 +235,7 @@
 
   .page-loader {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(135deg, #0a3d62, #1e90ff);
+    background: linear-gradient(135deg, #0f2027, #203a43);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     z-index: 999; transition: opacity 0.5s, visibility 0.5s;
   }
@@ -338,11 +338,7 @@
     </div>
   </div>
 
-  <!-- Setup Banner (shown when LeanCloud not configured) -->
-  <div class="setup-banner" id="setupBanner" style="display:none;">
-    ⚠️ <strong>云同步未配置</strong>：当前待办数据仅存在本地浏览器。<br>
-    配置方法：打开本文件，搜索 <code>YOUR_APP_ID</code> 和 <code>YOUR_APP_KEY</code>，替换为你的 LeanCloud 凭据即可。
-  </div>
+  <!-- Setup Banner removed -->
 
   <div class="nav-tabs" id="navTabs">
     <div class="nav-tab active" data-panel="itinerary">📅 行程</div>
@@ -835,7 +831,6 @@ function setSyncStatus(type, text) {
 async function loadTodoState() {
   // Show setup banner if not configured
   if (!cloudEnabled) {
-    document.getElementById('setupBanner').style.display = 'block';
     setSyncStatus('error', '仅本地');
   }
 
