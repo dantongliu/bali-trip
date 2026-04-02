@@ -248,9 +248,6 @@
   .loader-dots span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes blink { 0%,100% { opacity:0.2; } 50% { opacity:1; } }
 
-  /* Setup Banner */
-  .setup-banner {
-
   /* Quick Nav / TOC */
   .quick-nav {
     background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -280,17 +277,6 @@
     transform: translateY(-1px);
   }
 
-  /* Setup Banner */
-  .setup-banner {
-    background: rgba(255,107,53,0.25); border: 1px solid rgba(255,107,53,0.5);
-    border-radius: 14px; padding: 14px 16px; margin-bottom: 18px;
-    font-size: 0.82rem; line-height: 1.7; color: rgba(255,255,255,0.9);
-  }
-  .setup-banner strong { color: #ffa500; }
-  .setup-banner code {
-    background: rgba(0,0,0,0.3); padding: 1px 6px; border-radius: 4px;
-    font-size: 0.75rem; font-family: monospace;
-  }
 </style>
 </head>
 <body>
@@ -338,8 +324,6 @@
     </div>
   </div>
 
-  <!-- Setup Banner removed -->
-
   <div class="nav-tabs" id="navTabs">
     <div class="nav-tab active" data-panel="itinerary">📅 行程</div>
     <div class="nav-tab" data-panel="todo">✅ 待办</div>
@@ -360,22 +344,21 @@
       <div class="day-body">
         <div class="itin-block">
           <div class="itin-block-title">行程安排</div>
-          <div class="itin-text">21:30 北京大兴飞广州白云 T2（3h15m，+1天 00:45 抵达）
-00:45 广州白云 T2 中转休整（1h50m）
-02:35 广州白云 T2 飞巴厘岛伍拉赖机场（5h10m）
-07:45 抵达巴厘岛→ayana 林畔酒店（约 1h）
-09:00 办理入住 + 酒店休闲（悬崖泳池 / 沙滩放空）
-16:00 金巴兰海滩看日落（1.5h）</div>
+          <div class="itin-text">21:30 北京大兴 → 广州白云 T2（3h15m）
+00:45 广州 T2 中转休整（1h50m）
+02:35 广州 T2 → 巴厘岛伍拉赖机场（5h10m）
+07:45 抵达巴厘岛 → AYANA 酒店（约 1h）
+09:00 入住 + 悬崖泳池 / 沙滩放空
+16:00 金巴兰海滩日落（1.5h）</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🏨 住宿</div>
-          <div class="itin-text">ayana 林畔酒店（已订）
-RIMBA by AYANA Bali</div>
+          <div class="itin-text">RIMBA by AYANA Bali</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🍽️ 餐厅</div>
-          <div class="itin-text">中饭：grab点越南河粉
-晚饭：Kepiting Sukro Uluwatu 2（螃蟹、咸蛋黄炸鸡、海鲜炒饭）</div>
+          <div class="itin-text">午餐 ☀️ Grab 点越南河粉
+晚餐 🌙 Kepiting Sukro Uluwatu 2 · 螃蟹 / 咸蛋黄炸鸡 / 海鲜炒饭</div>
         </div>
       </div>
     </div>
@@ -392,22 +375,23 @@ RIMBA by AYANA Bali</div>
       <div class="day-body">
         <div class="itin-block">
           <div class="itin-block-title">行程安排</div>
-          <div class="itin-text">全天 ayana 林畔酒店深度休闲
-可选：酒店悬崖 SPA / 网红打卡点拍照 / 沙滩漫步
-傍晚酒店内享用海景晚餐</div>
+          <div class="itin-text">全天 AYANA 酒店深度休闲
+悬崖 SPA / 网红打卡拍照 / 沙滩漫步
+傍晚海景晚餐</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🏨 住宿</div>
-          <div class="itin-text">ayana 林畔酒店（已订）</div>
+          <div class="itin-text">RIMBA by AYANA Bali</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🎯 预约</div>
-          <div class="itin-text">预约悬崖观赏落日（提前10天）</div>
+          <div class="itin-text">悬崖落日观赏（提前 10 天预约）</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🍽️ 餐厅</div>
-          <div class="itin-text">中饭：samisami吃意面和披萨
-晚饭：Wahaha Pork Ribs Jimbaran（烤肋排、炸猪肘）或者hatiku（海鲜大排档）</div>
+          <div class="itin-text">午餐 ☀️ Samisami · 意面 / 披萨
+晚餐 🌙 Wahaha Pork Ribs Jimbaran · 烤肋排 / 炸猪肘
+　　　或 Hatiku · 海鲜大排档</div>
         </div>
       </div>
     </div>
@@ -424,29 +408,27 @@ RIMBA by AYANA Bali</div>
       <div class="day-body">
         <div class="itin-block">
           <div class="itin-block-title">行程安排</div>
-          <div class="itin-text">12:00 ayana 林畔酒店→萨努尔码头（0.75h）→西线核心
-破碎沙滩（1h，打卡天然拱门）
-天使浴池（1h，网红无边泳池拍照）
-天仙裂缝（1h，含下崖拍照时间）</div>
+          <div class="itin-text">12:00 AYANA → 萨努尔码头（45min）
+▸ 破碎沙滩（1h）天然拱门打卡
+▸ 天使浴池（1h）网红无边泳池
+▸ 天仙裂缝（1h）悬崖拍照</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🏨 住宿</div>
-          <div class="itin-text">蓝港海滨别墅和餐厅（已订）
-Blue Harbor Beachfront Villas & Resto</div>
+          <div class="itin-text">Blue Harbor Beachfront Villas & Resto</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🎯 包车东西线两日游</div>
-          <div class="itin-detail">4.27-4.28，2人带行李
-第一天：上午Ayana林畔接，巴厘岛走东线。需包含：巴厘岛专车单程接、单程船票、上岛费，午餐，东线专车
-第二天：Blue Harbor接，上午浮潜，下午走西线，回程，送回酒店Dinara Ubud。需包含：浮潜（拼船）、西线专车、下岛单程船票、送回巴厘岛的单程车
+          <div class="itin-detail">📅 4.27 — 4.28｜2 人带行李
+Day 1：AYANA 接 → 东线游玩（含专车、船票、上岛费、午餐）
+Day 2：Blue Harbor 接 → 上午浮潜 → 下午西线 → 送回 Dinara Ubud（含浮潜拼船、西线专车、船票、回程车）
 
-特殊说明：
-1）具体游玩景点可推荐，重体验质量不要求全打卡
-2）浮潜希望能够时间长一些不希望都在路上</div>
+📌 重体验质量，不求全打卡
+📌 浮潜希望时间充裕，减少路上耗时</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🍽️ 餐厅</div>
-          <div class="itin-text">晚饭：越南粉，挨着酒店 MeVui Penida</div>
+          <div class="itin-text">晚餐 🌙 MeVui Penida · 越南粉（紧邻酒店）</div>
         </div>
       </div>
     </div>
@@ -463,20 +445,19 @@ Blue Harbor Beachfront Villas & Resto</div>
       <div class="day-body">
         <div class="itin-block">
           <div class="itin-block-title">行程安排</div>
-          <div class="itin-text">上午潜水
-钻石沙滩（1.5h，悬崖沙滩打卡）
-树屋打卡（1h，网红机位拍照）
-水晶湾短暂休整（0.5h）
-下午回乌布</div>
+          <div class="itin-text">上午 浮潜
+▸ 钻石沙滩（1.5h）悬崖沙滩打卡
+▸ 树屋（1h）网红机位拍照
+▸ 水晶湾（30min）短暂休整
+下午 返回乌布</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🏨 住宿</div>
-          <div class="itin-text">乌布 Dinara 酒店
-Dinara Ubud</div>
+          <div class="itin-text">Dinara Ubud</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🍽️ 餐厅</div>
-          <div class="itin-text">晚饭：靠着海，西餐 Secret Penida Restaurant & Bar</div>
+          <div class="itin-text">晚餐 🌙 Secret Penida Restaurant & Bar · 海景西餐</div>
         </div>
       </div>
     </div>
@@ -493,27 +474,26 @@ Dinara Ubud</div>
       <div class="day-body">
         <div class="itin-block">
           <div class="itin-block-title">行程安排</div>
-          <div class="itin-text">09:00 乌布皇宫游览（1h，感受巴厘岛皇室建筑）
-10:00 乌布传统市场逛街（1h，淘手工艺品 / 伴手礼）
-11:00 圣猴森林公园游玩（1.5h，和猕猴互动）
-12:30 乌布市区简餐（1h）
-13:30 乌布特色 SPA（2h，舒缓海岛奔波疲劳）
-16:00 乌布艺术村闲逛 / 咖啡馆发呆（3h）
-傍晚 逛乌布夜市，品尝街头小吃</div>
+          <div class="itin-text">09:00 乌布皇宫（1h）巴厘岛皇室建筑
+10:00 传统市场（1h）手工艺品 / 伴手礼
+11:00 圣猴森林公园（1.5h）
+12:30 市区简餐
+13:30 SPA 放松（2h）
+16:00 艺术村闲逛 / 咖啡馆发呆
+傍晚 乌布夜市，品尝街头小吃</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🏨 住宿</div>
-          <div class="itin-text">乌布 Dinara 酒店</div>
+          <div class="itin-text">Dinara Ubud</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🎯 预约</div>
-          <div class="itin-text">SPA：Ubud Traditional Spa（最晚入场时间16:00）
-已通过 Klook 预约</div>
+          <div class="itin-text">Ubud Traditional Spa（最晚 16:00 入场）· Klook 已预约</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🍽️ 餐厅</div>
-          <div class="itin-text">中饭：Compound Warung（猪排饭），挨着皇宫5分钟
-晚饭：酒店附近餐厅 Melali Ubud 或便利店吃泡面</div>
+          <div class="itin-text">午餐 ☀️ Compound Warung · 猪排饭（距皇宫步行 5min）
+晚餐 🌙 Melali Ubud 或便利店泡面</div>
         </div>
       </div>
     </div>
@@ -530,19 +510,18 @@ Dinara Ubud</div>
       <div class="day-body">
         <div class="itin-block">
           <div class="itin-block-title">行程安排</div>
-          <div class="itin-text">休闲
-18:30 乌布稻田边晚餐，打卡田园风光
-晚间 民宿周边轻逛，享受乌布慢生活</div>
+          <div class="itin-text">白天自由休闲
+18:30 稻田边晚餐，田园风光打卡
+晚间 民宿周边散步，享受乌布慢时光</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🏨 住宿</div>
-          <div class="itin-text">乌布 Alaya 度假村（已订）
-Alaya Resort Ubud</div>
+          <div class="itin-text">Alaya Resort Ubud</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🍽️ 餐厅</div>
-          <div class="itin-text">中饭：Pison Ubud（稻田餐厅），提前whats up，紧挨着酒店
-晚饭：Twist Ubud（黄咖喱好吃），挨着椰子冰淇淋店，紧挨着酒店</div>
+          <div class="itin-text">午餐 ☀️ Pison Ubud · 稻田餐厅（紧邻酒店，需 WhatsApp 预约）
+晚餐 🌙 Twist Ubud · 黄咖喱推荐（旁边有椰子冰淇淋店）</div>
         </div>
       </div>
     </div>
@@ -559,22 +538,20 @@ Alaya Resort Ubud</div>
       <div class="day-body">
         <div class="itin-block">
           <div class="itin-block-title">行程安排</div>
-          <div class="itin-text">上午 ATV 丛林越野（2.5h，含装备讲解 + 接送，走田园 / 丛林路线）
-11:30 返程休整 + 简餐（1.5h）
-下午 阿勇河漂流（2.5h，经典平缓路线），含接送 + 简餐
-途径瀑布游览
-送到机场附近酒店</div>
+          <div class="itin-text">09:30 ATV 丛林越野（2.5h）田园 / 丛林路线
+11:30 休整 + 简餐
+13:00 阿勇河漂流（2.5h）经典平缓路线
+14:00 Tukad Cepung 瀑布
+回程 → 水明漾酒店</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🏨 住宿</div>
           <div class="itin-text">Tijili Hotel Seminyak</div>
         </div>
         <div class="itin-block">
-          <div class="itin-block-title">🎯 ATV + 漂流包车1日游</div>
-          <div class="itin-detail">酒店➡️ ATV，28min；ATV ➡️ 漂流，8min；漂流➡️ 酒店 1.5h
-包车一共936
-9点半去ATV，11点半去漂流，下午2点安排去瀑布（Tukad Cepung），回程
-已通过飞猪预约</div>
+          <div class="itin-block-title">🎯 ATV + 漂流包车一日游</div>
+          <div class="itin-detail">🚗 酒店 → ATV 28min → 漂流 8min → 酒店 1.5h
+💰 包车 ¥936｜飞猪已预约</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🍽️ 餐厅</div>
@@ -595,12 +572,12 @@ Alaya Resort Ubud</div>
       <div class="day-body">
         <div class="itin-block">
           <div class="itin-block-title">行程安排</div>
-          <div class="itin-text">9:00 逛 Seminyak Village（饰品/包包/衣服）
-10:30 逛 Bintang 超市（买伴手礼/零食）
-12:00 去 Pork Star 吃猪排饭
-16:00 巴厘岛飞胡志明市新山一机场（3h40m）
-18:40 抵达胡志明市→机场酒店（0.5h）
-酒店休整，为凌晨航班蓄力</div>
+          <div class="itin-text">09:00 Seminyak Village 购物（饰品 / 包包 / 衣服）
+10:30 Bintang 超市（伴手礼 / 零食）
+12:00 Pork Star 猪排饭
+16:00 巴厘岛 → 胡志明市新山一机场（3h40m）
+18:40 抵达胡志明市 → 机场酒店
+休整，为凌晨航班蓄力</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🏨 住宿</div>
@@ -621,8 +598,8 @@ Alaya Resort Ubud</div>
       <div class="day-body">
         <div class="itin-block">
           <div class="itin-block-title">行程安排</div>
-          <div class="itin-text">00:35 胡志明市新山一机场飞北京大兴（4h55m）
-06:30 抵达北京大兴，行程圆满结束 🎉</div>
+          <div class="itin-text">00:35 胡志明市 → 北京大兴（4h55m）
+06:30 抵达北京，行程圆满结束 🎉</div>
         </div>
         <div class="itin-block">
           <div class="itin-block-title">🏨 住宿</div>
@@ -680,22 +657,22 @@ if (LC_APP_ID !== 'YOUR_APP_ID' && LC_APP_KEY !== 'YOUR_APP_KEY') {
 // 待办数据定义（来自 Excel）
 // ============================================================
 const TODO_DATA = [
-  { id: 'todo-0',  text: '买机票（往返）+ 确认行李托运额 + 过境准备（办签证/落地签材料准备）', person: 'lei', status: 'done' },
-  { id: 'todo-1',  text: '酒店预定', person: 'dantong', status: 'done' },
-  { id: 'todo-2',  text: '预约当地行程（包车、景点、漂流、潜水等）', person: 'dantong', status: 'done' },
-  { id: 'todo-3',  text: '提前查找SPA和餐厅', person: 'dantong', status: 'done' },
-  { id: 'todo-4',  text: '购买清单：面罩，呼吸管，潜水袜，花洒，充电宝（3C），防水手机袋和防水包', person: 'dantong', status: 'done' },
-  { id: 'todo-5',  text: '购买：溯溪鞋，速干衣服2套，海滩风衣服，包括两人装备', person: 'dantong', status: 'done' },
-  { id: 'todo-6',  text: '购买：流量卡和转换插头', person: 'lei', status: 'done' },
-  { id: 'todo-7',  text: '订接送机（机场-酒店）', person: 'lei', status: 'ing', note: '巴厘岛接机-飞猪定（done）' },
-  { id: 'todo-8',  text: '研究打车app使用', person: 'lei', status: 'todo' },
-  { id: 'todo-9',  text: '买旅行保险', person: 'lei', status: 'todo' },
-  { id: 'todo-10', text: '换少量美金/印尼盾', person: 'lei', status: 'todo' },
-  { id: 'todo-11', text: '买电话卡/开通境外流量', person: 'lei', status: 'todo' },
-  { id: 'todo-12', text: '准备常用药品（防晒、肠胃、晕船等）', person: 'lei', status: 'todo' },
-  { id: 'todo-13', text: '检查行李证件（护照、机票行程单、酒店确认单）', person: 'dantong、lei', status: 'todo' },
-  { id: 'todo-14', text: '信用卡使用和盗刷', person: 'lei', status: 'todo' },
-  { id: 'todo-15', text: '餐厅提前预约（WhatsApp）', person: 'dantong', status: 'todo' },
+  { id: 'todo-0',  text: '往返机票 + 行李托运额 + 签证/落地签准备', person: 'lei', status: 'done' },
+  { id: 'todo-1',  text: '酒店预订', person: 'dantong', status: 'done' },
+  { id: 'todo-2',  text: '当地行程预约（包车·景点·漂流·潜水）', person: 'dantong', status: 'done' },
+  { id: 'todo-3',  text: 'SPA 和餐厅查找', person: 'dantong', status: 'done' },
+  { id: 'todo-4',  text: '潜水装备：面罩·呼吸管·潜水袜·防水袋·充电宝', person: 'dantong', status: 'done' },
+  { id: 'todo-5',  text: '户外装备：溯溪鞋·速干衣×2·海滩服（两人份）', person: 'dantong', status: 'done' },
+  { id: 'todo-6',  text: '流量卡 + 转换插头', person: 'lei', status: 'done' },
+  { id: 'todo-7',  text: '接送机（机场↔酒店）', person: 'lei', status: 'ing', note: '巴厘岛接机已定（飞猪）' },
+  { id: 'todo-8',  text: '研究当地打车 App', person: 'lei', status: 'todo' },
+  { id: 'todo-9',  text: '旅行保险', person: 'lei', status: 'todo' },
+  { id: 'todo-10', text: '兑换少量美金 / 印尼盾', person: 'lei', status: 'todo' },
+  { id: 'todo-11', text: '电话卡 / 境外流量', person: 'lei', status: 'todo' },
+  { id: 'todo-12', text: '常用药品（防晒·肠胃·晕船药等）', person: 'lei', status: 'todo' },
+  { id: 'todo-13', text: '行李证件核查（护照·机票·酒店确认单）', person: 'dantong、lei', status: 'todo' },
+  { id: 'todo-14', text: '信用卡境外使用 & 防盗刷', person: 'lei', status: 'todo' },
+  { id: 'todo-15', text: '餐厅 WhatsApp 预约', person: 'dantong', status: 'todo' },
 ];
 
 // 待办勾选状态（true = 已完成勾选）
